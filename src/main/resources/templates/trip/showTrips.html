@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Trip</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+   <!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <link href="jquery.datetimepicker.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="tail.select-bootstrap4.css">
+    <link type="text/css" rel="stylesheet" th:href="@{/static/select/bootstrap4/tail.select-default.min.css}" />
+    <link  rel="stylesheet" type="text/css" th:href="@{/static/css/error.css}" >
+    <link  rel="stylesheet" type="text/css" th:href="@{/static/css/style.css}" >
+    <link  rel="stylesheet" type="text/css" th:href="@{/static/scrollup/css/scrollup.css}" >
+    <link  rel="stylesheet" type="text/css" th:href="@{/static/scrollup/css/filter.css}" >
+    <link  rel="stylesheet" type="text/css" th:href="@{/static/datetimepicker/jquery.datetimepicker.css}" >
+    <link  rel="stylesheet" type="text/css" th:href="@{/static/datetimepicker/jquery.datetimepicker.min.css}" >
+    <div th:replace="home/adminHeader :: acss"></div>
+    <div th:replace="header :: header-css"/>
+</head>
+<body>
+<div sec:authorize="!isAuthenticated()">
+    <div th:replace="header :: header"/>
+</div>
+<div sec:authorize="hasRole('CLIENT')">
+    <div th:replace="home/clientHeader :: client-header"/>
+</div>
+<div sec:authorize="hasRole('ADMIN')">
+    <div th:replace="home/adminHeader :: admin-header"/>
+</div>
+<div sec:authorize="hasRole('WORKER')">
+    <div th:replace="home/workerHeader :: worker-header"/>
+</div>
+
+<div>
+    <form th:action="@{/trip/findTrips}" th:object="${tripCriteriaDTO}" method="post">
+        <div id="container-1" >
+
+            <div class="d-flex ">
+                <div class="control-group">
+
+                    <div style="display: flex; flex-direction: row; padding-left: 300px;" >
+
+                        <div  >
+                            <h1 for="city_from" class="col-form-label text-center" style="color: blue"  th:text="#{text.from}"></h1>
+                            <select class="form-control col-lg-auto " name="idCityDeparture"  id="select1"  required  >
+                                <optgroup th:each="country : ${countries}"  th:label="${country.name}">
+                                    <option th:each="city : ${country.cityDTOSet}"  th:value="${city.id}"  th:text="${city.name}"> </option>
+                                </optgroup>
+                            </select>
+
+                        </div>
+
+                        <div style="padding-left: 10px; " >
+                            <h1 for="city_to" class="col-form-label text-center" style="color: blue"  th:text="#{text.to}"></h1>
+                            <select class="form-control col-lg-auto " name="idCityArrival"  id="select2"  required  >
+                                <optgroup th:each="country : ${countries}"  th:label="${country.name}">
+                                    <option th:each="city : ${country.cityDTOSet}" th:value="${city.id}"  th:text="${city.name}"> </option>
+                                </optgroup>
+                            </select>
+
+                        </div>
+
+
+                        <div class="container text-center " style="padding-left: 10px;width: 200px;">
+                            <h1 for="picker1" class="col-form-label" th:text="#{text.time-departure}"></h1>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <button type="button" id="toggle" class="input-group-text"><i class="fa fa-calendar-alt" ></i></button>
+                                </div>
+                                <input type="text" name="departureDate" required id="picker1" class="form-control far">
+                            </div>
+                        </div>
+
+                        <div style="padding-top: 37px">
+                            <input type="hidden" name="status" th:value="${T(com.java.Travel.repository.entity.tripStatus).ACTIVE}">
+                            <input type="submit" class="btn btn-success" id="showExample" th:value="#{text.show}">
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="menu col-md-3 text-center"  style="padding: 0px 0px; position: absolute; margin:8vh 0px 0 28vh;width: 300px" >
+
+            <div class="fancy-hover" >
+                <div class="container " style="width: 400px; padding-left: 10px">
+                    <h4  style="color: white" for="freeSeats" class="col-form-label" th:text="#{text.free-seats}"></h4>
+                    <input placeholder="Enter a number" name="countSeats" id="freeSeats"  type="number"  min="0" max="299" step="1"/>
+                </div>
+            </div>
+            <div class="fancy-hover" style="height: 450px; " >
+                <div style="margin-top: -80px" >
+                    <h1 for="city_from" class="col-form-label text-center" style="color: white"  th:text="#{text.company}"></h1>
+                    <select class="form-control col-lg-auto"  name="idCompany"  id="select3">
+                        <option th:each="company : ${companies}"  th:value="${company.id}"  th:text="${company.name}"> </option>
+                    </select>
+                    <h1 for="city_from" class="col-form-label text-center" style="color: white"  th:text="#{text.rating}"></h1>
+                    <select class="form-control col-lg-auto"  name="ratingCompany">
+                        <option value="" th:text="'Select an Option...'" ></option>
+                        <option th:each="state : ${T(com.java.Travel.repository.entity.Rating).values()}"
+                                th:value="${state}"
+                                th:text="${state.name}">
+                        </option>
+                    </select>
+                    <hr />
+                    <h4  style="color: white" for="freeSeats" class="col-form-label" th:text="#{text.seat-price}"></h4>
+                    <h4 class="col-form-label" th:text="#{text.price-min}"></h4>
+                    <input  placeholder="Enter a number" name="minPrice" id="priceFrom"  type="number"  min="0" max="999999" step="1"/>
+                    <h4 class="col-form-label" th:text="#{text.price-max}"></h4>
+                    <input placeholder="Enter a number"  name="maxPrice" id="priceTo"  type="number"   max="1000000" step="1"/>
+
+                </div>
+            </div>
+            <div class="fancy-hover" >
+                <div class="container " style="color: white ;padding-left: 10px">
+                    <h4  style="color: white" for="freeSeats" class="col-form-label" th:text="#{text.choice}"></h4>
+                    <h4 class="col-form-label text-left" th:unless="${tripCriteriaDTO.countSeats== null}" name="countSeats" th:text="#{text.free-seats}+': '+${tripCriteriaDTO.countSeats}+'+'" />
+                    <h4 class="col-form-label text-left" th:unless="${companyChoice==null}" name="companyChoice" th:text="#{text.company}+': '+${companyChoice}" />
+                    <h4 class="col-form-label text-left" th:unless="${tripCriteriaDTO.ratingCompany==null}" name="ratingCompany" th:text="#{text.rating}+': '+${tripCriteriaDTO.ratingCompany.name}" />
+                    <h4 class="col-form-label text-left" th:unless="${tripCriteriaDTO.minPrice==null}" name="minPrice" th:text="#{text.seat-price}+'(min): '+${tripCriteriaDTO.minPrice}" />
+                    <h4 class="col-form-label text-left" th:unless="${tripCriteriaDTO.maxPrice==null}" name="maxPrice" th:text="#{text.seat-price}+'(max): '+${tripCriteriaDTO.maxPrice}" />
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+<div id="container-2" style="margin-left: 60vh" >
+
+
+
+    <div class="content col-md-8" style="padding-left: 0px" >
+        <div class="container " style="width: 800px; margin-top: -20px;">
+
+            <h2  th:if="${apiError == null}"
+                 th:unless="${city_from?.name == null}"
+                 th:text="${city_from?.name}+'-'+${city_to?.name}+'   '+${picker1}" style="color: #540070"></h2>
+            <div class="alert alert-warning" role="alert"  th:unless="${apiError == null}" th:text="#{${'text.error.' + apiError?.getMessage()}}"></div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div th:switch="${trips}" class="container my-md-12">
+
+                        <div class="col-md-12">
+                            <h2 th:case="null" th:text="#{text.record.found}"></h2>
+                            <div th:case="*">
+
+                                <div class="card border-success" style="margin-bottom: 15px" th:each="trip : ${trips}">
+                                    <!-- Шапка (bg-primary - цвет фона, text-white - цвет текста) -->
+                                    <div class="card-header bg-success text-white d-flex justify-content-between">
+                                        <h4 class="text-left" th:text="${trip.bus.companyDTO.name}"></h4>
+                                        <h4 >
+                                            <th:block th:switch="${trip.bus.companyDTO.rating.name}">
+                                                <div th:case="'ONE STAR'">
+                                                    <i class="far fa-star ml-2 myc" style="float:left;margin:0 -8px"></i>
+                                                </div>
+                                                <div th:case="'TWO STARS'"  >
+                                                    <i class="far fa-star ml-2 myc" style="float:left;margin:0 -8px"></i>
+                                                    <i class="far fa-star ml-2 myc" style="float:left;margin:0 0px"></i>
+                                                </div>
+                                                <div th:case="'THREE STARS'"  >
+                                                    <i class="far fa-star ml-2 myc" style="float:left;margin:0 -8px"></i>
+                                                    <i class="far fa-star ml-2 myc" style="float:left;margin:0 -8px"></i>
+                                                    <i class="far fa-star ml-2 myc" style="float:left;margin:0 0px"></i>
+                                                </div>
+                                                <div th:case="'FOUR STARS'"  >
+                                                    <i class="far fa-star ml-2 myc" style="float:left;margin:0 -8px"></i>
+                                                    <i class="far fa-star ml-2 myc" style="float:left;margin:0 -8px"></i>
+                                                    <i class="far fa-star ml-2 myc" style="float:left;margin:0 -8px"></i>
+                                                    <i class="far fa-star ml-2 myc" style="float:left;margin:0 0px"></i>
+                                                </div>
+                                                <div th:case="'FIVE STARS'"  >
+                                                    <i class="far fa-star ml-2 myc" style="float:left;margin:0 -8px"></i>
+                                                    <i class="far fa-star ml-2 myc" style="float:left;margin:0 -8px"></i>
+                                                    <i class="far fa-star ml-2 myc" style="float:left;margin:0 -8px"></i>
+                                                    <i class="far fa-star ml-2 myc" style="float:left;margin:0 -8px"></i>
+                                                    <i class="far fa-star ml-2 myc" style="float:left;margin:0 0px"></i>
+                                                </div>
+                                            </th:block>
+                                        </h4>
+                                    </div>
+                                    <!-- Текстовый контент -->
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between">
+                                            <div class="d-flex justify-content-start">
+                                                <div class="d-flex align-items-start flex-column">
+                                                    <h1 th:text="${trip.timeDeparture}"></h1>
+                                                    <span th:text="${trip.dateDeparture}"></span>
+                                                    <span th:text="${trip.busStationDeparture.cityDTO.name}" ></span>
+                                                    <span th:text="${trip.busStationDeparture.name}" ></span>
+                                                </div>
+                                                <div class="d-flex align-items-start flex-column">
+                                                    <img th:src="@{/static/images/bus_up.png}" style="width: 70px;height: 70px; " alt="pl_ap">
+                                                    <h6 style="color: #4a2bff" th:text="${trip.busStationDeparture.code}"></h6>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center flex-column ">
+                                                <h6 th:text="#{text.on-way}"></h6>
+                                                <h6 th:text="${trip.travelTime}"></h6>
+                                                <h6 th:text="#{text.without-stop}"></h6>
+                                            </div>
+                                            <div class="d-flex justify-content-start ">
+                                                <div class="d-flex align-items-end flex-column">
+                                                    <img th:src="@{/static/images/bus_down.jpg}" style="width: 70px;height: 70px; " alt="pl_ap">
+                                                    <h6 style="color: #4a2bff" th:text="${trip.busStationArrival.code}"></h6>
+                                                </div>
+                                                <div class="d-flex align-items-end flex-column">
+                                                    <h1 th:text="${trip.timeArrival}"></h1>
+                                                    <span th:text="${trip.dateArrival}"></span>
+                                                    <span th:text="${trip.busStationArrival.cityDTO.name}"></span>
+                                                    <span th:text="${trip.busStationArrival.name}"></span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <h6 class="card-text" th:text="#{text.free-seats}+':'+${trip.freeSeats}"></h6>
+                                        <h6 class="card-text" th:text="#{text.all-seats}+':'+${trip.allSeats}"></h6>
+                                        <input type="hidden" id="trip_id" th:value="${trip?.id}">
+                                        <form th:action="@{/trip/show/{id}(id=${trip.id})}" method="get">
+                                            <button type="submit" class="btn badge-warning"  id="buy" th:text="#{text.buy}+' $'+${trip.price}"></button>
+                                        </form>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div id="container-3">
+
+    <div class="footer">
+
+    </div>
+</div>
+<a href="#" class="scrollup">Наверх</a>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script  src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" th:src="@{/static/datetimepicker/jquery.datetimepicker.full.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/script/bootstrap-input-spinner.js}"></script>
+<script type="text/javascript" th:src="@{/static/script/index.js}" src="../static/script/index.js"></script>
+<script th:src="@{/static/select/tail.select-full.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/scrollup/js/scroll.js}" src="../static/j/main.js"></script>
+
+</body>
+</html>

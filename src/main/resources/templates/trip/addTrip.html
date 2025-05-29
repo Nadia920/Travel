@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Trip | Add</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!--<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <link href="jquery.datetimepicker.min.css" rel="stylesheet">
+    <link  rel="stylesheet" type="text/css" th:href="@{/static/css/error.css}" >
+    <link  rel="stylesheet" type="text/css" th:href="@{/static/css/style.css}" >
+    <link  rel="stylesheet" type="text/css" th:href="@{/static/datetimepicker/jquery.datetimepicker.css}" >
+    <link  rel="stylesheet" type="text/css" th:href="@{/static/datetimepicker/jquery.datetimepicker.min.css}" >
+    <div th:replace="home/adminHeader :: acss"></div>
+</head>
+<body>
+<div th:replace="home/workerHeader :: worker-header"/>
+<div class="myForm" style="margin-left: -90vh">
+
+    <div class="" id="exampleModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content" style="width: 280%;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel" th:text="#{text.create}"></h5>
+                </div>
+
+                <div class="modal-body">
+
+
+                    <div class="modal-content">
+                        <div class="card-body">
+                            <div class="row vdivide">
+                                <div class="col-sm-4 text-center">
+                                    <h5 class="card-title" th:text="#{text.country}+':'"></h5>
+
+                                    <div class="control-group">
+                                        <div style="display: flex; flex-direction: row;">
+                                            <div>
+                                                <label for="select_country_fr" class="col-form-label" th:text="From"></label>
+                                                <select class="form-control col-lg-auto" name="idCountry_fr"  id="select_country_fr" required >
+                                                    <option value="" selected>&#45;&#45;&#45;&#45;</option>
+                                                    <option th:each="country : ${countries}" th:value="${country.id}" th:text="${country.name}"  ></option>
+                                                </select>
+                                            </div>
+                                            <div style="padding-left: 10px">
+                                                <label for="select_country_to" class="col-form-label" th:text="To"></label>
+                                                <select class="form-control col-lg-auto " name="idCountry_to" id="select_country_to"  required>
+                                                    <option value="">&#45;&#45;&#45;&#45;</option>
+                                                    <option th:each="country : ${countries}" th:value="${country.id}" th:text="${country.name}"  ></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-sm-4 text-center">
+                                    <h5 class="card-title" th:text="#{text.city}+':'"></h5>
+
+                                    <div class="control-group ">
+                                        <div style="display: flex; flex-direction: row;">
+                                            <div>
+                                                <label for="select_city_fr" class="col-form-label" th:text="From"></label>
+                                                <select class="form-control col-lg-auto" name="idCity_fr" id="select_city_fr"  required>
+                                                    <option value="">&#45;&#45;&#45;&#45;</option>
+                                                    <option th:each="city : ${cities}" th:value="${city.id}" th:text="${city.name}"></option>
+                                                </select>
+                                            </div>
+                                            <div style="padding-left: 10px">
+                                                <label for="select_city_to" class="col-form-label" th:text="To"></label>
+                                                <select class="form-control col-sm-auto" name="idCity_to" id="select_city_to"  required>
+                                                    <option value="">&#45;&#45;&#45;&#45;</option>
+                                                    <option th:each="city : ${cities}" th:value="${city.id}" th:text="${city.name}"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-sm-4 text-center">
+                                    <h5 class="card-title" th:text="#{text.busStation}+':'"></h5>
+
+                                    <div class="control-group">
+                                        <div style="display: flex; flex-direction: row;">
+                                            <div>
+                                                <label for="select_busStation_fr" class="col-form-label" th:text="From"></label>
+                                                <select class="form-control col-lg-auto" name="idBusStation_fr" id="select_busStation_fr"  required>
+                                                    <option value="">&#45;&#45;&#45;&#45;</option>
+                                                    <option th:each="busStation : ${busStations}" th:value="${busStation.id}" th:text="${busStation.name}+'('+${busStation.code}+')"></option>
+                                                </select>
+                                            </div>
+                                            <div style="padding-left: 10px">
+                                                <label for="select_busStation_to" class="col-form-label" th:text="To"></label>
+                                                <select class="form-control col-sm-auto" name="idBusStation_to" id="select_busStation_to"  required>
+                                                    <option value="">&#45;&#45;&#45;&#45;</option>
+                                                    <option th:each="busStation : ${busStations}" th:value="${busStation.id}" th:text="${busStation.name}"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-content">
+                        <div class="card-body">
+                            <div class="row vdivide">
+
+                                <div class="col-sm-4 text-center">
+                                    <h5 class="card-title" th:text="#{text.date}+':'"></h5>
+
+                                    <div style="display: flex; flex-direction: row;">
+                                        <div class="container " style="width: 400px">
+                                            <h3 for="busStation_fr" class="col-form-label" th:text="#{text.time-departure}"></h3>
+                                            <input type="text" name="picker1" id="picker1" class="form-control far">
+                                        </div>
+                                        <div class="container " style="width: 400px; padding-left: 10px">
+                                            <h3 for="busStation_fr" class="col-form-label" th:text="#{text.time-arrival}"></h3>
+                                            <input type="text" name="picker2" id="picker2" class="form-control far">
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-sm-4 text-center">
+                                    <h5 class="card-title" th:text="#{text.company}+':'"></h5>
+
+                                    <div class="control-group">
+                                        <div style="display: flex; flex-direction: row;">
+                                            <div>
+                                                <label for="select_company" class="col-form-label" th:text="#{text.select-company}"></label>
+                                                <select class="form-control col-lg-auto" name="idCompany"  id="select_company" required >
+                                                    <option value="" selected>&#45;&#45;&#45;&#45;</option>
+                                                    <option th:each="company : ${companies}" th:value="${company.id}" th:text="${company.name}"  ></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-sm-4 text-center">
+                                    <h5 class="card-title" th:text="#{text.bus}+':'"></h5>
+
+                                    <div class="control-group ">
+                                        <div style="display: flex; flex-direction: row;">
+                                            <div>
+                                                <label for="select_bus" class="col-form-label" th:text="#{text.select-bus}"></label>
+                                                <select class="form-control col-lg-auto" name="idBus" id="select_bus"  required>
+                                                    <option value="">&#45;&#45;&#45;&#45;</option>
+                                                    <option th:each="bus : ${buses}" th:value="${bus.id}" th:text="${bus.sideNumber}"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-content">
+                        <div class="card-body">
+                            <div class="row vdivide">
+
+                                <div class="text-center">
+                                    <h5 class="card-title" th:text="#{text.seats-info}+':'"></h5>
+
+                                    <div style="display: flex; flex-direction: row;" class="text-center">
+                                        <div class="container " style="width: 400px">
+                                            <h3 for="allSeats" class="col-form-label" th:text="#{text.all-seats}"></h3>
+                                            <input placeholder="Enter a number" name="allSeats" id="allSeats" required type="number"  min="0" max="300" step="1"/>
+                                        </div>
+                                        <div class="container " style="width: 400px; padding-left: 10px">
+                                            <h3 for="freeSeats" class="col-form-label" th:text="#{text.free-seats}"></h3>
+                                            <input placeholder="Enter a number" name="freeSeats" id="freeSeats" required type="number"  min="0" step="1"/>
+                                        </div>
+                                        <div class="container " style="width: 400px; padding-left: 10px">
+                                            <h3 for="price" class="col-form-label" th:text="#{text.seat-price}"></h3>
+                                            <input data-prefix="$"  data-decimals="2" name="price" id="price" min="0" max="10000" step="0.1" type="number" placeholder="Enter ticket price" required/>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+
+
+                            </div>
+                        </div >
+                    </div>
+                    <div>
+                        <p id="error-dates" class="text-danger text-left "></p>
+                        <span class="error"
+                              th:text="#{${'text.error.' + apiError?.getMessage()}}"
+                              th:unless="${apiError == null}">Nothing</span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a th:href="@{/trip}"> <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{bt.back}"></button></a>
+                    <button type="button" class="btn btn-primary" id="save" th:text="#{bt.save}"/></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script th:src="@{/static/datetimepicker/jquery.datetimepicker.full.min.js}"></script>
+<script th:src="@{/static/script/bootstrap-input-spinner.js}"></script>
+<script type="text/javascript" th:src="@{/static/script/editTrip.js}" src="../static/script/trip.js"></script>
+</body>
+</html>

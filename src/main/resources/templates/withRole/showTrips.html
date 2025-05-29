@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Trip</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!--<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <link href="jquery.datetimepicker.min.css" rel="stylesheet">
+    <link  rel="stylesheet" type="text/css" th:href="@{/static/css/error.css}" >
+    <link  rel="stylesheet" type="text/css" th:href="@{/static/css/style.css}" >
+    <link  rel="stylesheet" type="text/css" th:href="@{/static/scrollup/css/scrollup.css}" >
+    <link  rel="stylesheet" type="text/css" th:href="@{/static/scrollup/css/filter.css}" >
+    <div th:replace="home/adminHeader :: acss"></div>
+</head>
+<body>
+<div sec:authorize="hasRole('ROLE_ADMIN')">
+    <div th:replace="home/adminHeader :: admin-header"/>
+</div>
+<div sec:authorize="hasRole('ROLE_WORKER')">
+    <div th:replace="home/workerHeader :: worker-header"/>
+</div>
+
+<!--<div class="alert alert-success"   role="alert" id="alertCansTripSuccessId" style="width: 400px;margin:5px 0 0 150vh;position: absolute"></div>
+-->
+<div id="container-2">
+
+    <div class="menu col-md-3" style="padding: 0px 0px" >
+        <div class="fancy-hover" id="home">
+            <a style="color: white;" th:href="@{/trip(status='ACTIVE')}"  th:text="#{text.status.active}"></a>
+        </div>
+        <div class="fancy-hover" id="top">
+            <a style="color: white;" th:href="@{/trip(status='FINISHED')}" th:text="#{text.status.finished}"></a>
+        </div>
+        <div class="fancy-hover" id="wait">
+            <a style="color: white;" th:href="@{/trip(status='CANCELED')}" th:text="#{text.status.canceled}"></a>
+        </div>
+    </div>
+
+    <div class="content col-md-8" style="padding-left: 0px" >
+        <div class="container " style="width: 800px; margin-top: -20px;">
+            <div class="card">
+                <div class="card-body">
+                    <div th:switch="${trips}" class="container my-md-12">
+                        <p class="my-9" sec:authorize="hasRole('ROLE_WORKER')">
+                            <a th:href="@{/trip/create}" class="btn btn-primary">
+                                <i class="fas fa-plus ml-2" th:text="#{text.trips}"></i></a>
+                        </p>
+                        <p></p>
+
+
+                        <div class="col-md-12">
+                            <h2 th:case="null" th:text="#{text.record.found}"></h2>
+                            <div th:case="*">
+
+                                <div id="cardBorder" class="card border-success" style="margin-bottom: 15px" th:each="trip : ${trips}">
+                                    <!-- Шапка (bg-primary - цвет фона, text-white - цвет текста) -->
+                                    <div class="card-header bg-success text-white d-flex justify-content-between">
+                                        <span class="text-left" th:text="${trip.bus.companyDTO.name}"></span>
+                                        <span style="color: yellow;" th:text="${trip.status}"></span>
+                                    </div>
+                                    <!-- Текстовый контент -->
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between" style="padding-bottom: 10px">
+                                            <div class="d-flex justify-content-start">
+                                                <div class="d-flex align-items-start flex-column">
+                                                    <h1 th:text="${trip.timeDeparture}"></h1>
+                                                    <span th:text="${trip.dateDeparture}"></span>
+                                                    <span th:text="${trip.busStationDeparture.cityDTO.name}" ></span>
+                                                </div>
+                                                <div class="d-flex align-items-start flex-column">
+                                                    <img th:src="@{static/images/bus_up.png}" style="width: 70px;height: 70px; " alt="pl_ap">
+                                                    <h6 style="color: #4a2bff" th:text="${trip.busStationDeparture.code}"></h6>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center flex-column ">
+                                                <h6 th:text="#{text.on-way}"></h6>
+                                                <h6 th:text="${trip.travelTime}"></h6>
+                                                <h6 th:text="#{text.without-stop}"></h6>
+                                            </div>
+                                            <div class="d-flex justify-content-start ">
+                                                <div class="d-flex align-items-end flex-column">
+                                                    <img th:src="@{static/images/bus_down.jpg}" style="width: 70px;height: 70px; " alt="pl_ap">
+                                                    <h6 style="color: #4a2bff" th:text="${trip.busStationArrival.code}"></h6>
+                                                </div>
+                                                <div class="d-flex align-items-end flex-column">
+                                                    <h1 th:text="${trip.timeArrival}"></h1>
+                                                    <span th:text="${trip.dateArrival}"></span>
+                                                    <span th:text="${trip.busStationArrival.cityDTO.name}"></span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <input type="hidden" class="idTrip" th:value="${trip.id}" id="idTrip">
+                                        <h6 class="card-text" th:text="#{text.seat-price}+': '+${trip.price}"></h6>
+                                        <h6 class="card-text" th:text="#{text.free-seats}+': '+${trip.freeSeats}"></h6>
+                                        <h6 class="card-text" th:text="#{text.all-seats}+': '+${trip.allSeats}"></h6>
+                                        <h6 class="card-text" th:text="#{text.number-tickets-sold}+': '+${trip.soldTickets}"></h6>
+
+                                    </div>
+                                    <div class="card-footer d-flex flex-row bd-highlight " >
+                                        <a th:if="${trip.status.toString() == 'ACTIVE' }" th:href="@{/trip/edit/{id} (id=${trip.id}) }"
+                                           class="btn btn-primary" th:text="#{text.edit}" ></a>
+
+                                        <a
+                                                th:unless="${trip.soldTickets == 0}"
+                                                th:href="@{trip/{id}/orders(id=${trip.id})}"  class="btn btn-info" style="margin-left: 10px"
+                                                th:text="#{text.number-tickets-sold}"></a>
+
+                                        <form  th:action="@{/trip/canceled/{id}(id=${trip.id})}" method="get">
+                                            <button
+                                                    th:if="${#authorization.expression('hasRole(''ROLE_WORKER'')')}"
+                                                    th:unless="${trip.status.toString() != 'ACTIVE' }" type="submit" id="canceledId" class="btn btn-danger" style="margin-left: 10px" th:text="#{text.cancel}"></button>
+                                        </form>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="container-3">
+
+    <div class="footer">
+
+    </div>
+</div>
+<a href="#" class="scrollup">Наверх</a>
+
+<script type="text/javascript" th:src="@{/static/scrollup/js/scroll.js}" src="../static/j/main.js"></script>
+<script type="text/javascript" th:src="@{/static/scrollup/js/jquery-3.2.1.min.js}" src="../static/j/jquery-3.2.1.min.js" ></script>
+</body>
+</html>

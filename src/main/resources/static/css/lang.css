@@ -1,0 +1,40 @@
+.m-footer {
+    align-content: end;
+    margin-left: 30%;
+    /* Выравнивание по центру *
+       position: fixed; /* Фиксированное положение */
+    left: 0;
+    bottom: 0; /* Левый нижний угол */
+    padding: 10px; /* Поля вокруг текста */
+    color: black; /* Цвет текста */
+    width: 100%; /* Ширина слоя */
+}
+
+.menu-lang-home{
+    text-align:right;
+    width:100%;
+    margin-top:5px;
+    padding-left:20px;
+    padding-right:20px;
+}
+
+.menu-lang-home a{
+    color:white;
+    text-decoration:none;
+}
+.menu-lang-home a {
+    display: inline-block;
+    padding: 0 5px;
+}
+
+.en-us{
+}
+
+.fr{
+    padding-left: 10px;
+}
+
+.de{
+    margin-right: 5%;
+    padding-left: 10px;
+}

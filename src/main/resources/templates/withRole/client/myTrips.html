@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Trip</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!--<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <link href="jquery.datetimepicker.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="tail.select-bootstrap4.css">
+    <link type="text/css" rel="stylesheet" th:href="@{/static/select/bootstrap4/tail.select-default.min.css}" />
+    <link  rel="stylesheet" type="text/css" th:href="@{/static/css/error.css}" >
+    <link  rel="stylesheet" type="text/css" th:href="@{/static/css/style.css}" >
+    <link  rel="stylesheet" type="text/css" th:href="@{/static/scrollup/css/scrollup.css}" >
+    <link  rel="stylesheet" type="text/css" th:href="@{/static/scrollup/css/filter.css}" >
+    <link  rel="stylesheet" type="text/css" th:href="@{/static/datetimepicker/jquery.datetimepicker.css}" >
+    <link  rel="stylesheet" type="text/css" th:href="@{/static/datetimepicker/jquery.datetimepicker.min.css}" >
+    <div th:replace="home/adminHeader :: acss"></div>
+    <div th:replace="header :: header-css"/>
+</head>
+<body>
+<div th:replace="home/clientHeader :: client-header"/>
+
+
+
+<div id="container-2" >
+
+    <div class="menu col-md-3 " style="padding: 0px 0px" >
+        <div class="fancy-hover" id="home">
+            <a style="color: white;" th:href="@{/orders/client(status='ACTIVE')}"  th:text="#{text.status.active}"></a>
+        </div>
+        <div class="fancy-hover" id="top">
+            <a style="color: white;" th:href="@{/orders/client(status='FINISHED')}" th:text="#{text.status.finished}"></a>
+
+        </div>
+        <div class="fancy-hover" id="wait">
+            <a style="color: white;" th:href="@{/orders/client(status='CANCELED')}" th:text="#{text.status.canceled}"></a>
+        </div>
+    </div>
+
+    <div class="content col-md-8" style="padding-left: 0px" >
+        <div class="container " style="width: 800px; margin-top: -20px;">
+
+
+            <div class="alert alert-warning" role="alert"  th:unless="${apiError == null}" th:text="#{${'text.error.' + apiError?.getMessage()}}"></div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div th:switch="${orders}" class="container my-md-12">
+
+                        <div class="col-md-12">
+                            <h2 th:case="null" th:text="#{text.record.found}"></h2>
+                            <div th:case="*">
+
+                                <div class="card border-success " style="margin-bottom: 15px" th:each="order : ${orders}">
+                                    <div class="MyOrder">
+                                        <!-- Шапка (bg-primary - цвет фона, text-white - цвет текста) -->
+                                        <div class="card-header bg-success text-white">
+                                            <div class="d-flex justify-content-between">
+                                                <h6 class="" th:text="#{text.company}+': '+${order.tripDTO.bus.companyDTO.name}"></h6>
+                                                <h6 class="" th:text="#{text.bus}+': '+${order.tripDTO.bus.name}"></h6>
+                                                <h6 class="" th:text="#{text.side-number}+': '+${order.tripDTO.bus.sideNumber}"></h6>
+                                            </div>
+                                        </div>
+                                        <!-- Текстовый контент -->
+                                        <div class="card-body" >
+                                            <div class="d-flex justify-content-between">
+                                                <div class="d-flex justify-content-start">
+                                                    <div class="d-flex align-items-start flex-column">
+                                                        <h1 th:text="${order.tripDTO.timeDeparture}"></h1>
+                                                        <span th:text="${order.tripDTO.dateDeparture}"></span>
+                                                        <span th:text="${order.tripDTO.busStationDeparture.cityDTO.name}" ></span>
+                                                        <span th:text="${order.tripDTO.busStationDeparture.name}" ></span>
+                                                    </div>
+                                                    <div class="d-flex align-items-start flex-column">
+                                                        <img th:src="@{/static/images/pl_up.png}" style="width: 70px;height: 70px; " alt="pl_ap">
+                                                        <h6 style="color: #4a2bff" th:text="${order.tripDTO.busStationDeparture.code}"></h6>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex align-items-center flex-column ">
+                                                    <h6 th:text="#{text.on-way}"></h6>
+                                                    <h6 th:text="${order.tripDTO.travelTime}"></h6>
+                                                    <h6 th:text="#{text.without-stop}"></h6>
+                                                </div>
+                                                <div class="d-flex justify-content-start ">
+                                                    <div class="d-flex align-items-end flex-column">
+                                                        <img th:src="@{/static/images/pl_down.png}" style="width: 70px;height: 70px; " alt="pl_ap">
+                                                        <h6 style="color: #4a2bff" th:text="${order.tripDTO.busStationArrival.code}"></h6>
+                                                    </div>
+                                                    <div class="d-flex align-items-end flex-column">
+                                                        <h1 th:text="${order.tripDTO.timeArrival}"></h1>
+                                                        <span th:text="${order.tripDTO.dateArrival}"></span>
+                                                        <span th:text="${order.tripDTO.busStationArrival.cityDTO.name}"></span>
+                                                        <span th:text="${order.tripDTO.busStationArrival.name}"></span>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <h6 class="card-text" th:text="#{text.count-tickets}+': '+${order.ticketDTOList.size()}"></h6>
+                                            <h6 class="card-text" th:text="#{text.seat-price}+'($): '+${order.ticketDTOList.get(0).price}"></h6>
+                                            <h6 class="card-text" th:text="#{text.final-cost}+'($): '+${order.finalCost}"></h6>
+                                            <h6 class="card-text" th:text="#{text.order-date}+': '+${order.orderDate}"></h6>
+                                            <input type="hidden" id="order_id" th:value="${order?.id}">
+                                            <input type="hidden" id="ser" th:value="${order?.finalCost}">
+                                        </div>
+                                        <div class="card-footer d-flex justify-content-between">
+                                            <h4 th:text="'№ '+${order.id}" ></h4>
+                                            <!-- Button trigger modal -->
+
+                                            <a th:unless="${order.tripDTO.freeSeats == 0}"
+                                               th:if="${order.status.toString() == 'ACTIVE'}"
+                                               class="btn" style="background-color: #e0a800" th:href="@{/orders/{id}/moreTickets(id=${order.id})}" th:text="#{text.take-more}"></a>
+                                            <a th:if="${order.status.toString() == 'ACTIVE'}"
+                                               class="btn btn-primary"  th:href="@{/orders/return/{id}(id=${order.id})}" th:text="#{text.return-tickets}"></a>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div id="container-3">
+    <div class="footer">
+    </div>
+</div>
+
+
+
+
+<a href="#" class="scrollup">Наверх</a>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script  src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" th:src="@{/static/datetimepicker/jquery.datetimepicker.full.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/script/bootstrap-input-spinner.js}"></script>
+<script th:src="@{/static/select/tail.select-full.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/scrollup/js/scroll.js}" src="../static/j/main.js"></script>
+
+</body>
+</html>

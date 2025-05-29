@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Bus stations</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <div th:replace="home/adminHeader :: acss"></div>
+</head>
+
+<body>
+
+<div sec:authorize="hasRole('ROLE_ADMIN')">
+    <div th:replace="home/adminHeader :: admin-header"/>
+</div>
+<div sec:authorize="hasRole('ROLE_WORKER')">
+    <div th:replace="home/workerHeader :: worker-header"/>
+</div>
+
+<div class="container my-2 col-lg-10" style="width: 40%">
+    <div class="card">
+        <div class="card-body" >
+
+            <div th:switch="${busStations}" class="container my-9">
+                <p class="my-9">
+                    <a th:href="@{/busStation/add}" class="btn btn-primary">
+                        <i class="fas fa-user-plus ml-2" th:text="#{text.add-busStation}"></i></a>
+                </p>
+
+                <div class="col-md-4">
+                    <h2 th:case="null" th:text="#{text.record.found}"></h2>
+                    <div th:case="*">
+                        <table class="table table-hover" >
+                            <thead>
+                            <tr>
+                                <th th:text="#{text.name}"></th>
+                                <th th:text="#{text.code}"></th>
+                                <th th:text="#{text.city}"></th>
+                                <th th:text="#{text.country}"></th>
+                                <th th:text="#{text.edit}"></th>
+                                <th th:text="#{text.delete}"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="busStation : ${busStations}">
+                                <td th:text="${busStation.name}"></td>
+                                <td th:text="${busStation.code}"></td>
+                                <td th:text="${busStation.cityDTO.name}"></td>
+                                <td th:text="${busStation.cityDTO.countryDTO.name}"></td>
+                                <td>
+                                    <a th:href="@{ /busStation/edit/{id} (id=${busStation.id}) }">
+                                    <i class="fas fa-edit ml-2"></i>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a th:href="@{/busStation/delete/{id} (id=${busStation.id})}"
+                                       onclick="return confirm('Are you sure?')">
+                                        <span style="color: Tomato;">
+                                          <i class="fas fa-trash-alt ml-2"> </i>
+                                        </span>
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

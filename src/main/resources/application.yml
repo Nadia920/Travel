@@ -1,0 +1,90 @@
+spring:
+  main:
+   allow-bean-definition-overriding: true
+flyway:
+  baseline-on-migrate: true
+  baseline-version: 1.4
+#Configuration
+server:
+  servlet:
+    context-path: /
+---
+#JPA PROPERTIES
+spring:
+  jpa:
+    database: POSTGRESQL
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
+      #create-drop
+---
+#DATABASE
+spring:
+  datasource:
+    platform: postgres
+    #   For Docker
+    #    url: jdbc:postgresql://localhost:5432/Travel-Agency-db
+    #    For Local host
+    url: jdbc:postgresql://localhost:5432/Travel-Agency-db
+    username: postgres
+    password: Nadja1008
+    driverClassName: org.postgresql.Driver
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate.dialect: org.hibernate.dialect.PostgreSQL14Dialect.
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+    database: POSTGRESQL
+  database:
+    driverClassName: org.postgresql.Driver
+---
+#Thymeleaf
+spring:
+  thymeleaf:
+    mode: HTML5
+    cache: false
+
+---
+#Log4j
+
+logging:
+  file:
+    name: src/main/resources/logs/dev_app.log
+  pattern:
+    console: "%d %-5level %logger : %msg%n"
+    file: "%d %-5level [%thread] %logger : %msg%n"
+  level:
+    org.springframework.web: ERROR
+    com.howtodoinjava: DEBUG
+    org.hibernate: ERROR
+
+---
+# Charset of HTTP requests and responses. Added to the "Content-Type" header if not set explicitly.
+spring:
+  http:
+    encoding:
+      charset: UTF-8
+      # Enable http encoding support.
+      enabled: true
+      # Force the encoding to the configured charset on HTTP requests and responses.
+      force: true
+---
+#email configuration
+
+spring:
+  mail:
+    host: smtp.mailtrap.io
+    port: 2525
+    username: b2592fe3eaad13
+    password: 0bf2ccb8316813
+
+server:
+  port: 8080
+
+---
+spring:
+  flyway:
+    encoding: UTF-8
+    baseline-on-migrate: true

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Countries | Edit</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <!-- <script type="text/javascript" th:src="@{/static/script/js.js}" src="../static/script/js.js"
+      ></script> /-->
+    <link  rel="stylesheet" type="text/css" th:href="@{/static/css/error.css}" >
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <div th:replace="home/adminHeader :: acss"></div>
+</head>
+<body>
+<div class="myForm">
+    <form th:action="@{/country/edit}" th:object="${country}" method="post">
+        <div class="" id="exampleModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel" th:text="#{text.update-create}"></h5>
+                    </div>
+
+                    <div th:if="${#fields.hasErrors()}">
+                        <span class="error" th:text="#{text.correct.problem}"></span>
+                    </div>
+                    <span class="error"
+                          th:text="#{${'text.error.' + apiError?.getMessage()}}"
+                          th:unless="${apiError == null}">Nothing</span>
+
+
+                    <div class="modal-body">
+
+                        <input type="hidden" id="id" data-th-value="${country?.id}" data-th-name="id">
+
+                        <div class="form-group">
+                            <label for="name" class="col-form-label" th:text="#{text.country}"></label>
+                            <input type="text" th:value="${country?.name}" th:name="name" class="form-control"
+                                   id="name" th:placeholder="#{text.country}" autofocus required
+                                   pattern="([A-Z])([a-zA-Z-\s]{3,39})" maxlength="40"/>
+                            <span class="form__error" th:text="#{text.error.country}"></span>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <a th:href="@{/country}"> <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{bt.back}"></button></a>
+                        <input type="submit" class="btn btn-primary" id="save" th:value="#{bt.save}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
+
+
+

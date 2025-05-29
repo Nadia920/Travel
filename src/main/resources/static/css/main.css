@@ -1,0 +1,35 @@
+h1 {
+    color: #4a2bff;
+}
+
+h2 {
+    color: #ff171c;
+}
+
+footer {
+    margin-top: 60px;
+}
+
+.m-footer {
+    align-content: end;
+    margin-left: 30%;
+    /* Выравнивание по центру *
+       position: fixed; /* Фиксированное положение */
+    left: 0;
+    bottom: 0; /* Левый нижний угол */
+    padding: 10px; /* Поля вокруг текста */
+    color: black; /* Цвет текста */
+    width: 100%; /* Ширина слоя */
+}
+
+.en-us{
+    margin-left: 90%;
+}
+
+.fr{
+    padding-left: 10px;
+}
+
+.de{
+    padding-left: 10px;
+}

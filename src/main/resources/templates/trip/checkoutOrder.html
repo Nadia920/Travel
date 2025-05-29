@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Trip| Buy Ticket</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <!--<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">-->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+  <link href="jquery.datetimepicker.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="tail.select-bootstrap4.css">
+  <link type="text/css" rel="stylesheet" th:href="@{/static/select/bootstrap4/tail.select-default.min.css}" />
+  <link  rel="stylesheet" type="text/css" th:href="@{/static/css/error.css}" >
+  <link  rel="stylesheet" type="text/css" th:href="@{/static/css/style.css}" >
+  <link  rel="stylesheet" type="text/css" th:href="@{/static/scrollup/css/scrollup.css}" >
+  <link  rel="stylesheet" type="text/css" th:href="@{/static/scrollup/css/filter.css}" >
+  <link  rel="stylesheet" type="text/css" th:href="@{/static/datetimepicker/jquery.datetimepicker.css}" >
+  <link  rel="stylesheet" type="text/css" th:href="@{/static/datetimepicker/jquery.datetimepicker.min.css}" >
+  <div th:replace="home/adminHeader :: acss"></div>
+
+</head>
+<body>
+<div th:replace="home/clientHeader :: client-header"/>
+
+
+
+
+
+<div class="content col-md-12" style="padding-left: 0px;" >
+  <div class="container " style="width: 1200px; margin-top: -20px;">
+    <div class="" id="exampleModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width: 600px">
+          <div class="modal-header">
+            <h5 class="modal-title">Buy ticket</h5>
+          </div>
+
+          <div class="modal-body">
+            <div class="card border-success" style="margin-bottom: 15px">
+              <!-- Шапка (bg-primary - цвет фона, text-white - цвет текста) -->
+              <div class="card-header bg-success text-white">
+                <div class="d-flex justify-content-between">
+                  <input type="hidden" id="idTrip" th:value="${trip?.id}">
+                  <h6 class="" th:text="#{text.company}+': '+${trip.buse.companyDTO.name}"></h6>
+                  <h6 class="" th:text="#{text.bus}+': '+${trip.bus.name}"></h6>
+                  <h6 class="" th:text="#{text.side-number}+': '+${trip.bus.sideNumber}"></h6>
+                </div>
+              </div>
+              <!-- Текстовый контент -->
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <div class="d-flex justify-content-start">
+                    <div class="d-flex align-items-start flex-column">
+                      <h1 th:text="${trip.timeDeparture}"></h1>
+                      <span th:text="${trip.dateDeparture}"></span>
+                      <span th:text="${trip.busStationDeparture.cityDTO.name}" ></span>
+                      <span th:text="${trip.busStationDeparture.name}" ></span>
+                    </div>
+                    <div class="d-flex align-items-start flex-column">
+                      <img th:src="@{/static/images/bus_up.png}" style="width: 70px;height: 70px; " alt="pl_ap">
+                      <h6 style="color: #4a2bff" th:text="${trip.busStationDeparture.code}"></h6>
+                    </div>
+                  </div>
+                  <div class="d-flex align-items-center flex-column ">
+                    <h6 th:text="#{text.on-way}"></h6>
+                    <h6 th:text="${trip.travelTime}"></h6>
+                    <h6 th:text="#{text.without-stop}"></h6>
+                  </div>
+                  <div class="d-flex justify-content-start ">
+                    <div class="d-flex align-items-end flex-column">
+                      <img th:src="@{/static/images/bus_down.jpg}" style="width: 70px;height: 70px; " alt="pl_ap">
+                      <h6 style="color: #4a2bff" th:text="${trip.busStationArrival.code}"></h6>
+                    </div>
+                    <div class="d-flex align-items-end flex-column">
+                      <h1 th:text="${trip.timeArrival}"></h1>
+                      <span th:text="${trip.dateArrival}"></span>
+                      <span th:text="${trip.busStationArrival.cityDTO.name}"></span>
+                      <span th:text="${trip.busStationArrival.name}"></span>
+                    </div>
+
+                  </div>
+                </div>
+                <h6 class="card-text" th:text="#{text.free-seats}+': '+${trip.freeSeats}"></h6>
+                <input type="hidden" id="freeSeats" th:value="${trip.freeSeats}">
+                <h6 class="card-text" th:text="#{text.all-seats}+': '+${trip.allSeats}"></h6>
+                <input type="hidden" id="allseats" th:value="${trip?.id}">
+                <h6 class="card-text" th:text="#{text.seat-price}+'($): '+${trip.price}"></h6>
+                <input type="hidden" id="price" th:value="${trip?.price}">
+              </div>
+            </div>
+
+
+            <div class="alert alert-warning" role="alert"  th:unless="${apiError == null}" th:text="#{${'text.error.' + apiError?.getMessage()}}"></div>
+            <div class="d-flex justify-content-start">
+              <div class="container " style="width: 250px; margin: 0px 0px ">
+                <h2 for="countSeats" class="col-form-label"  th:text="#{text.number-seats}"></h2>
+                <input placeholder="Enter a number" name="countSeats" id="countSeats" required type="number" value="1"   min="1" step="1"/>
+              </div>
+
+              <div class="container " style="width: 250px; margin: 0px 0px ">
+                <h2 for="finalCost" class="col-form-label"  style="margin-left: -50px" th:text="#{text.final-cost}"></h2>
+                <div class="input-group" style="width: 150px" >
+                  <div class="input-group-prepend" style="height: 50%">
+                    <span class="input-group-text">$</span>
+                  </div>
+                  <input type="text" class="form-control" id="finalCost" data-decimals="2" readonly>
+                </div>
+              </div>
+            </div>
+            <div>
+              <p type="text" class="error" id="error-dates"></p>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+
+            <a  th:href="@{/}" class="btn btn-secondary" data-dismiss="modal" th:text="#{bt.back}"></a>
+            <button class="btn btn-success" id="buy" th:text="#{text.buy}"></button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<a href="#" class="scrollup">Наверх</a>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script  src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" th:src="@{/static/datetimepicker/jquery.datetimepicker.full.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/script/bootstrap-input-spinner.js}"></script>
+<script type="text/javascript" th:src="@{/static/script/index.js}" src="../static/script/index.js"></script>
+<script th:src="@{/static/select/tail.select-full.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/scrollup/js/scroll.js}" src="../static/j/main.js"></script>
+
+</body>
+</html>
